@@ -15,7 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include, re_path
 from rest_framework.authtoken.views import obtain_auth_token
@@ -29,22 +30,18 @@ urlpatterns = [
     path('', include('blog.urls')),
 
 
-
-
     # path('', include('home.urls')),
     # path('todos/', include('todo.urls')),
     # path('api-auth/', include('rest_framework.urls')),
     # path('auth-token/', obtain_auth_token, name='generate_auth_token'),
-
     # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='toke n_refresh'),
-
     # path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     # path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-    
 ]
-
+if settings.DEBUG :
+    urlpatterns += static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)
 
 
 
