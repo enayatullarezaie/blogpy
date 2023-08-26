@@ -4,5 +4,6 @@ from django.urls import path, re_path
 from . import views
 
 urlpatterns =[
-   re_path(r'^$', views.IndexPage.as_view(), name= 'index')
+   path('', views.IndexPage.as_view(), name= 'index'),
+   path('contact/', views.ContactPage.as_view(), name= 'contact'),
 ]
