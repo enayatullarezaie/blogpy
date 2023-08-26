@@ -6,3 +6,13 @@ files/
 database/
 
 .DS_Store
+
+app/blog/migrations/
+app/staticfiles/
+
+
+
+
+
+
+

@@ -207,11 +207,14 @@ SPECTACULAR_SETTINGS = {
 
 #ckeditor.settings
 #static files
-STATIC_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 #CDEditor
 CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/'
-CKEDITOR_UPLOAD_PATH = '/uploads /'
+CKEDITOR_UPLOAD_PATH = '/uploads/'
 

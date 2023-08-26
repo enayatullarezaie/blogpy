@@ -25,18 +25,23 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('home.urls')),
-    path('todos/', include('todo.urls')),
-    path('api-auth/', include('rest_framework.urls')),
-    path('auth-token/', obtain_auth_token, name='generate_auth_token'),
-
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='toke n_refresh'),
-
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     re_path(r'^ckeditor/',include('ckeditor_uploader.urls')),
+    path('', include('blog.urls')),
+
+
+
+
+    # path('', include('home.urls')),
+    # path('todos/', include('todo.urls')),
+    # path('api-auth/', include('rest_framework.urls')),
+    # path('auth-token/', obtain_auth_token, name='generate_auth_token'),
+
+    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='toke n_refresh'),
+
+    # path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    # path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    # path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     
 ]
 
