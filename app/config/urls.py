@@ -32,7 +32,7 @@ urlpatterns = [
 
     # path('', include('home.urls')),
     # path('todos/', include('todo.urls')),
-    # path('api-auth/', include('rest_framework.urls')),
+    path('auth/', include('rest_framework.urls')),
     # path('auth-token/', obtain_auth_token, name='generate_auth_token'),
     # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='toke n_refresh'),
@@ -43,6 +43,8 @@ urlpatterns = [
 if settings.DEBUG :
     urlpatterns += static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)
     urlpatterns += static('contact/static/', document_root= settings.STATIC_ROOT)
+    urlpatterns += static('about/static/', document_root= settings.MEDIA_ROOT)
+    urlpatterns += static('category/static/', document_root= settings.MEDIA_ROOT)
 
 
 
