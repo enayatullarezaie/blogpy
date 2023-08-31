@@ -13,7 +13,7 @@ class IndexPage(TemplateView):
 
    def get(self, request, **kwargs):
       article_data = []
-      all_articles = Article.objects.order_by('-created_at').all()[:9]
+      all_articles = Article.objects.order_by('-created_at').all()[:]
 
       for article in all_articles : 
          article_data.append({
@@ -57,10 +57,11 @@ class AllArticlesAPIView(APIView):
 
    def get(self, request):
       try:
-         all_articles = Article.objects.order_by('-created_at').all()[:10]
+         all_articles = Article.objects.order_by('-created_at').all()
          data= []
          for article in all_articles :
             data.append({
+               "id": article.id,
                "title": article.title,
                "cover": article.cover.url if article.cover else None,
                "content": article.content,
@@ -71,7 +72,7 @@ class AllArticlesAPIView(APIView):
             })
          return Response({ "data": data }, status.HTTP_200_OK)
       except:
-         return Response({'message': 'internal server error'},status.HTTP_500_INTERNAL_SERVER_ERROR)
+         return Response({'message': 'Internal Server Error'},status.HTTP_500_INTERNAL_SERVER_ERROR)
       
 
 class SingleArticleAPIView(APIView):
@@ -145,7 +146,39 @@ class SubmitArticleAPIView(APIView):
          return Response({'message': 'internal server error'},status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class UpdateArticleAPIView(APIView):
+   def put(self, request, format= None):
+      try:
+         serializer= serializers.UpdateArticleSerializer(data= request.data)
+         if serializer.is_valid() :
+            article_id = serializer.data.get('article_id')
+            new_cover = request.FILES['cover']
+         else:
+            return Response({'msg': 'Bad request'},status.HTTP_400_BAD_REQUEST)
+         
+         Article.objects.filter(id= article_id).update(cover = f'article_cover/{new_cover}')
+         
+         return Response({'msg': 'OK'}, status.HTTP_200_OK)
 
+      except:
+         return Response({'message': 'internal server error'},status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class DeleteArticleAPIView(APIView):
+   def delete(self, request, format= None):
+      try:
+         serializer= serializers.DeleteArticleSerializer(data= request.data)
+         if serializer.is_valid() :
+            article_id = serializer.data.get('article_id')
+         else:
+            return Response({'msg': 'Bad request'},status.HTTP_400_BAD_REQUEST)
+         
+         Article.objects.filter(id= article_id).delete()
+         
+         return Response({'msg': 'OK'}, status.HTTP_200_OK)
+
+      except:
+         return Response({'message': 'internal server error'},status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 

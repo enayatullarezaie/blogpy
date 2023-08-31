@@ -9,8 +9,8 @@ from django. core.exceptions import ValidationError
 # Create your models here.
 
 def validate_file_extension (value):
-   ext = os.path.splitext (value.name)[1]
-   valid_extensions = ['.jpg', '.png', '.webp'] 
+   ext = os.path.splitext(value.name)[1]
+   valid_extensions = ['.jpeg', '.jpg', '.png', '.webp'] 
    if not ext.lower() in valid_extensions:
       raise ValidationError('Unsupported file extension.')
 
@@ -23,7 +23,7 @@ class UserProfile (models.Model) :
 
 class Article(models .Model):
    title = models.CharField(max_length=128, null=False, blank=False)
-   cover = models.FileField (upload_to='files/article_cover/', null=False, blank=False, validators= [validate_file_extension])
+   cover = models.FileField (upload_to='article_cover/', null=False, blank=False, validators= [validate_file_extension])
    content = RichTextField()
    created_at = models.DateTimeField(default=datetime.now, blank=False)
    category = models.ForeignKey('Category', on_delete= models.CASCADE)

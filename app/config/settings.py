@@ -29,8 +29,9 @@ SECRET_KEY = 'django-insecure--5tr92d_!+nc0+2*&-hylnao@pjja!(wop7(ljyx^27@t9_2*k
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -90,7 +91,7 @@ DATABASES = {
         'NAME': 'drf',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'HOST': 'postgresql',
         'PORT': '5432',
     }
 }
@@ -205,7 +206,7 @@ SPECTACULAR_SETTINGS = {
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 STATIC_URL = 'static/'
-STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'static'), )
+STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'static'), ) #====------------
 
 
 #CDEditor
@@ -214,3 +215,7 @@ CKEDITOR_UPLOAD_PATH = '/uploads/'
 
 MEDIA_URL = 'files/'
 MEDIA_ROOT= os.path.join(BASE_DIR, '')
+
+
+
+

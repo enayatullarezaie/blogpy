@@ -1,16 +1,21 @@
 FROM python:3.11
+LABEL MAINTAINER="enayatulla rezaie"
 
-RUN apt-get update && \
-   apt-get install -y libpq-dev gcc
-
-WORKDIR /code
+RUN mkdir /drf
+WORKDIR /drf
+COPY . /drf/
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONBUFFERED 1
 EXPOSE 8000
 
+ADD ./requirements/requirements.txt /drf/
 RUN pip install --upgrade pip
-COPY ./requirements.txt /code/requirements.txt 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /drf/requirements/requirements.txt
+RUN python app/manage.py collectstatic --no-input
 
-COPY ./ /code/
+
+
+CMD [ "gunicorn", "--chdir", "blog.py", "--bind", ":8000", "config.wsgi.:application" ]
+
+

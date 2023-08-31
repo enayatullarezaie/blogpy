@@ -1,12 +1,28 @@
 version: '3.8'
 
 services:
+   drf:
+      build:
+         context : .
+         dockerfile : Dockerfile
+      volumes:
+         - .:blogpy
+         - static_volume:blogpy/static
+         - files_volume:/
+      restart: always
+      env_file: .env
+      ports:
+         - 8000:8000
+      networks:
+         - net1
+         - nginx_drf
 
    postgresql:
       image: postgres:latest
       container_name: postgresql
       volumes:
-         -  ./database/data:/var/lib/postgresql/data
+         - ./database/data:/var/lib/postgresql/data
+         # - drf:/var/lib/postgresql/data
       environment:
          POSTGRES_USER: postgres
          POSTGRES_PASSWORD: postgres
@@ -15,8 +31,27 @@ services:
       networks:
          - net1
 
+volumes:
+   drf:
+      external: true
+
+   static_volume:
+      external: true
+
+   files_volume:
+      external: true
+
 
 networks:
    net1:
+      external: true
       driver: bridge
-      name: net
+      name: net_drf
+
+   nginx_drf:
+      external: true
+      driver: bridge
+      name: nginx_drf
+
+
+
