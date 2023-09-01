@@ -204,14 +204,14 @@ SPECTACULAR_SETTINGS = {
 
 #static files
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
-STATIC_URL = 'static/'
-STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'static'), ) #====------------
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
+# STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'static'), ) #====------------
 
 
 #CDEditor
 CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/'
-CKEDITOR_UPLOAD_PATH = '/uploads/'
+CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 MEDIA_URL = 'files/'
 MEDIA_ROOT= os.path.join(BASE_DIR, '')
