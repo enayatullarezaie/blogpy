@@ -2,6 +2,7 @@
 
 
 venv/
+static/
 files/
 database/
 
@@ -9,6 +10,7 @@ database/
 
 app/blog/migrations/
 app/staticfiles/
+app/files/
 
 
 

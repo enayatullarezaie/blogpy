@@ -26,12 +26,10 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'^ckeditor/',include('ckeditor_uploader.urls')),
+    re_path('ckeditor/',include('ckeditor_uploader.urls')),
     path('', include('blog.urls')),
 
 
-    # path('', include('home.urls')),
-    # path('todos/', include('todo.urls')),
     path('auth/', include('rest_framework.urls')),
     # path('auth-token/', obtain_auth_token, name='generate_auth_token'),
     # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
