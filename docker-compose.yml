@@ -2,56 +2,52 @@ version: '3.8'
 
 services:
 
-   nginx:
-      container_name: nginx
-      build: 
-         context: ./config/nginx/
-         dockerfile: Dockerfile
-      image: drf_nginx
-      ports:
-         - 80:80
+   postgre:
+      image: postgres:15.4
+      container_name: postgre
       volumes:
-         - static_volume:/drf/static
-         - files_volume:/drf/files
+         - ./database/data:/var/lib/postgresql/data
+      environment:
+         POSTGRES_USER: postgres
+         POSTGRES_PASSWORD: postgres
       networks:
-         - nginx_drf 
-      depends_on:
-         - drf
+         - drf_postgres
 
-   drf:
-      build:
-         context : .
-         dockerfile : Dockerfile
-      image: drf
-      container_name: drf
+   django:
+      build: .
+      image: django_blog
+      container_name: django_blog
       volumes:
-         - .:/drf
-         - static_volume:/drf/static
-         - files_volume:/drf/files
-      restart: always
-      env_file: 
-         - .env
-      expose:
-         - 8000
+         - .:/app
+         - static_volume:/app/static
+         - files_volume:/app/files
+      command: >
+         sh -c "python manage.py migrate &&
+                python manage.py collectstatic --no-input --clear &&
+                gunicorn config.wsgi:application --bind 0.0.0.0:8000"
       networks:
          - drf_postgres
          - nginx_drf
       depends_on:
-         - postgresql
+         - postgre
 
-   postgresql:
-      image: postgres:15.4
-      container_name: postgresql
+   nginx:
+      image: nginx:1.25
+      container_name: nginx_blog
+      ports:
+         - 80:80
       volumes:
-         - ./database/data:/var/lib/postgresql/data
-         # - drf:/var/lib/postgresql/data
-      environment:
-         POSTGRES_USER: postgres
-         POSTGRES_PASSWORD: postgres
-      expose:
-         - 5432
+         -  ./nginx:/etc/nginx/conf.d
+         -  static_volume:/var/www/static
+         -  files_volume:/var/www/files
       networks:
-         - drf_postgres
+         - nginx_drf 
+      depends_on:
+         - django
+
+
+
+
 
 volumes:
    drf:

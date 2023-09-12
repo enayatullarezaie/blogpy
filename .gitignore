@@ -2,15 +2,14 @@
 
 
 venv/
-static/
 files/
+static/
 database/
+staticfiles/
 
 .DS_Store
 
-app/blog/migrations/
-app/staticfiles/
-app/files/
+blog/migrations/
 
 
 
