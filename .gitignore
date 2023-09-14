@@ -3,7 +3,7 @@
 
 venv/
 files/
-static/
+static
 database/
 staticfiles/
 
