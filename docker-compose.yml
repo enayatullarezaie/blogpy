@@ -11,65 +11,65 @@ services:
          POSTGRES_USER: postgres
          POSTGRES_PASSWORD: postgres
       networks:
-         - drf_postgres
+         - blog_django_postgre
 
    django:
       build: .
-      image: django_blog
-      container_name: django_blog
+      image: blog_django
+      container_name: blog_django
+      restart: always
       volumes:
          - .:/app
-         - static_volume:/app/static
-         - files_volume:/app/files
+         - blog_static_volume:/app/static
+         - blog_files_volume:/app/files
       command: >
          sh -c "python manage.py migrate &&
                 python manage.py collectstatic --no-input --clear &&
                 gunicorn config.wsgi:application --bind 0.0.0.0:8000"
       networks:
-         - drf_postgres
-         - nginx_drf
+         - blog_django_postgre
+         - blog_django_nginx
       depends_on:
          - postgre
 
    nginx:
       image: nginx:1.25
-      container_name: nginx_blog
+      container_name: blog_nginx
       ports:
          - 80:80
       volumes:
          -  ./nginx:/etc/nginx/conf.d
-         -  static_volume:/var/www/static
-         -  files_volume:/var/www/files
+         -  blog_static_volume:/app/static
+         -  blog_files_volume:/app/files
+         # -  blog_static_volume:/var/www/static
+         # -  blog_files_volume:/var/www/files
       networks:
-         - nginx_drf 
+         - blog_django_nginx
       depends_on:
          - django
-
-
-
 
 
 volumes:
    drf:
       external: true
 
-   static_volume:
+   blog_static_volume:
       external: true
 
-   files_volume:
+   blog_files_volume:
       external: true
 
 
 networks:
-   drf_postgres:
+   blog_django_postgre:
       external: true
       driver: bridge
-      name: drf_postgres
+      name: blog_django_postgre
 
-   nginx_drf:
+   blog_django_nginx:
       external: true
       driver: bridge
-      name: nginx_drf
+      name: blog_django_nginx
 
 
 

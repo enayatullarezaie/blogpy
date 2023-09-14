@@ -85,13 +85,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+HOST ="localhost"
+if str(BASE_DIR) == "/app": HOST ='postgre'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'drf',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'postgre',
+        'HOST': HOST,
         'PORT': '5432',
     }
 }
@@ -208,8 +210,8 @@ SPECTACULAR_SETTINGS = {
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
-MEDIA_ROOT= os.path.join(BASE_DIR, '')
-MEDIA_URL = 'files/'
+MEDIA_ROOT= os.path.join(BASE_DIR, 'files/')
+MEDIA_URL = ''
 
 CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/'
 CKEDITOR_UPLOAD_PATH = 'uploads/'

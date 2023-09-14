@@ -155,7 +155,7 @@ class UpdateArticleAPIView(APIView):
          else:
             return Response({'msg': 'Bad request'},status.HTTP_400_BAD_REQUEST)
          
-         Article.objects.filter(id= article_id).update(cover = f'article_cover/{new_cover}')
+         Article.objects.filter(id= article_id).update(cover = f'files/article_cover/{new_cover}')
          
          return Response({'msg': 'OK'}, status.HTTP_200_OK)
 
