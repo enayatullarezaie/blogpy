@@ -3,7 +3,6 @@ from .models import *
 
 
 class SingleArticleSerializer(serializers.Serializer):
-
    title = serializers.CharField(required=True, allow_null=False, allow_blank= False, max_length= 128)
    cover = serializers.CharField(required=True, allow_null=False, allow_blank= False, max_length= 256)
    content = serializers.CharField(required=True, allow_null=False, allow_blank= False, max_length= 2048)
@@ -11,7 +10,6 @@ class SingleArticleSerializer(serializers.Serializer):
 
 
 class SubmitArticleSerializer(serializers.Serializer):
-
    title = serializers.CharField(required=True, allow_null=False, allow_blank= False, max_length= 128)
    cover = serializers.FileField(required=True, allow_null=False, allow_empty_file= False)
    content = serializers.CharField(required=True, allow_null=False, allow_blank= False, max_length= 2048)
@@ -20,13 +18,16 @@ class SubmitArticleSerializer(serializers.Serializer):
    promote = serializers.BooleanField(required=True, allow_null=False )
 
 
-
-
 class UpdateArticleSerializer(serializers.Serializer):
    article_id= serializers.IntegerField(required=True, allow_null=False)
    cover = serializers.FileField(required=True, allow_null=False, allow_empty_file= False)
 
 
-
 class DeleteArticleSerializer(serializers.Serializer):
    article_id= serializers.IntegerField(required=True, allow_null=False)
+
+
+
+
+
+

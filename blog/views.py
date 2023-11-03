@@ -39,17 +39,17 @@ class IndexPage(TemplateView):
          'article_data': article_data,
          'promote_data': promote_data
       }
-      return render(request, "index.html", context)
+      return render(request, "blog/index.html", context)
 
 
 class ContactPage(TemplateView):
-   template_name = 'page-contact.html'
+   template_name = 'blog/page-contact.html'
 
 class AboutPage(TemplateView):
-   template_name = 'page-about.html'
+   template_name = 'blog/page-about.html'
 
 class CategoryPage(TemplateView):
-   template_name = 'category.html'
+   template_name = 'blog/page-category.html'
 
 
 class AllArticlesAPIView(APIView):
