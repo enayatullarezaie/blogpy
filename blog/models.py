@@ -17,6 +17,7 @@ def validate_file_extension (value):
 
 
 class UserProfile (models.Model) :
+   id = models.BigAutoField(primary_key= True, editable=False)
    user = models.OneToOneField(User, on_delete=models.CASCADE)
    avatar = models.FileField(upload_to= 'user_avatar/', null=False, blank=False, validators= [validate_file_extension])
    description = models.CharField(max_length=512, null=False, blank=False)
@@ -31,9 +32,10 @@ class Category (models.Model):
 
 
 class Article(models.Model):
+   id = models.BigAutoField(primary_key= True, editable=False)
    title = models.CharField(max_length=128, null=False, blank=False)
    cover = models.FileField (upload_to='article_cover/', null=False, blank=False, validators= [validate_file_extension])
-   content = RichTextField()
+   content = models.TextField()
    created_at = models.DateTimeField(default=datetime.now, blank=False)
    category = models.ForeignKey(Category, on_delete= models.CASCADE)
    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)

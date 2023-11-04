@@ -8,6 +8,12 @@ class SingleArticleSerializer(serializers.Serializer):
    content = serializers.CharField(required=True, allow_null=False, allow_blank= False, max_length= 2048)
    created_at = serializers.DateTimeField(required=True, allow_null=False )
 
+class ArticleSerializer(serializers.ModelSerializer):
+   
+   class Meta:
+      model= Article
+      fields="__all__"
+
 
 class SubmitArticleSerializer(serializers.Serializer):
    title = serializers.CharField(required=True, allow_null=False, allow_blank= False, max_length= 128)

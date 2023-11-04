@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from django.views.generic import TemplateView
 from .models import *
 from rest_framework.views import APIView
@@ -16,6 +16,7 @@ class IndexPage(TemplateView):
 
       for article in all_articles : 
          article_data.append({
+            'id' : article.id,
             'title': article.title,
             'cover': article.cover.url,
             'category': article.category.title,
@@ -36,10 +37,21 @@ class IndexPage(TemplateView):
             })
 
       context = {
-         'article_data': article_data,
+         'article_list': article_data,
          'promote_data': promote_data
       }
       return render(request, "blog/index.html", context)
+
+class ArticleDetail(TemplateView):
+   def get(self, request, pk):
+      try:
+         article= Article.objects.get(pk= pk)
+         # comments = Coment.onjects.filter(article=article)
+      except:
+         return HttpResponse({'detail': "no article found"}, status.HTTP_404_NOT_FOUND)
+      context={ "article": article, "comments":"comments", "author": 'author' }
+      return render( request,'blog/single-blog.html', context=context)
+
 
 
 class ContactPage(TemplateView):
@@ -54,38 +66,28 @@ class CategoryPage(TemplateView):
 
 class AllArticlesAPIView(APIView):
 
-   def get(self, request):
+   def get(self, request, *args, **kwargs):
       try:
-         all_articles = Article.objects.order_by('-created_at').all()
-         data= []
-         for article in all_articles :
-            data.append({
-               "id": article.id,
-               "title": article.title,
-               "cover": article.cover.url if article.cover else None,
-               "content": article.content,
-               "category": article.category.title,
-               "author": article.author.user.first_name + ' ' + article.author.user.last_name,
-               "created_at": article.created_at.date(),
-               "promote": article.promote,
-            })
-         return Response({ "data": data }, status.HTTP_200_OK)
+         articles = Article.objects.order_by('-created_at').all()
       except:
-         return Response({'message': 'Internal Server Error'},status.HTTP_500_INTERNAL_SERVER_ERROR)
+         return Response({'detail': 'No article found'}, status= 404)
+      
+      serialized = serializers.ArticleSerializer(articles, many=True)
+      return Response({ "detail": serialized.data }, status.HTTP_200_OK)
       
 
 class SingleArticleAPIView(APIView):
-   def get(self, request, format=None):
+   def get(self, request):
       try:
          article_title = request.GET['article_title']
          article = Article.objects.filter(title__contains= article_title)
-         serialized_data = serializers.SingleArticleSerializer(article, many= True)
-         data = serialized_data.data
+         serialized = serializers.SingleArticleSerializer(article, many= True)
+         data = serialized.data
 
-         return Response({"data":data}, status.HTTP_200_OK)
+         return Response({"detail":data}, status.HTTP_200_OK)
 
       except:
-         return Response({'message': 'internal server error'},status.HTTP_500_INTERNAL_SERVER_ERROR)
+         return Response({'detail': 'article not found'}, status= 404)
 
 
 class SearchArticleAPIView(APIView):
