@@ -1,13 +1,12 @@
-version: '3.8'
+version: "3.8"
 services:
-
    postgre:
       image: postgres:15.4
       container_name: blogpypostgre
       ports:
-         -  5432:5432
+         - 5432:5432
       volumes:
-         -  ./database/postgresql:/var/lib/postgresql/data
+         - ./database/postgresql:/var/lib/postgresql/data
       environment:
          POSTGRES_USER: postgres
          POSTGRES_PASSWORD: postgres
@@ -21,32 +20,32 @@ services:
       container_name: blogpydjango
       restart: always
       volumes:
-         -  .:/app
+         - .:/app
       ports:
-         -  8000:8000
+         # localPort:dockerNetworkPort
+         - 80:8000
       command: >
          sh -c "python manage.py makemigrations &&
                 python manage.py migrate &&
                 python manage.py collectstatic --no-input &&
-                gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+                python manage.py runserver 0.0.0.0:8000"
       networks:
-         -  blog_django_postgre
-         -  blog_django_nginx
+         - blog_django_postgre
+         - blog_django_nginx
       depends_on:
-         -  postgre
+         - postgre
 
-   nginx:
-      image: nginx:1.25
-      container_name: blogpynginx
-      ports:
-         -  80:80
-      volumes:
-         -  ./nginx:/etc/nginx/conf.d
-      networks:
-         -  blog_django_nginx
-      depends_on:
-         - django
-
+   # nginx:
+   #    image: nginx:1.25
+   #    container_name: blogpynginx
+   #    ports:
+   #       - 80:80
+   #    volumes:
+   #       - ./nginx:/etc/nginx/conf.d
+   #    networks:
+   #       - blog_django_nginx
+   #    depends_on:
+   #       - django
 
 volumes:
    nothing:
@@ -61,7 +60,3 @@ networks:
       # external: true
       driver: bridge
       name: blog_django_nginx
-
-
-
-

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link
+         rel="stylesheet"
+         href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+         crossorigin="anonymous"
+      />
+      <title>{{title}}</title>
+   </head>
+   <body>
+      <div class="navbar bg-light border-bottom p-1 pr-5 pl-5 mb-5">
+         <h2 class="nav-item">Home page</h2>
+         <a href="/tickets/add-ticket" class="nav-item">Add New +</a>
+      </div>
+
+      <div class="container">
+         <table class="table font-weight-light">
+            <thead>
+               <tr class="font-weight-light">
+                  <th scope="col">#</th>
+                  <th scope="col">title</th>
+                  <th scope="col">body</th>
+                  <th scope="col">created_at</th>
+                  <th scope="col">id</th>
+               </tr>
+            </thead>
+
+            <tbody>
+               {% for ticket in tickets %}
+               <tr>
+                  <td scope="col">{{forloop.counter}}</td>
+                  <td scope="col">
+                     <a href="/tickets/{{ticket.id}}">{{ticket.title}}</a>
+                  </td>
+                  <td scope="col">{{ticket.body}}</td>
+                  <td scope="col">{{ticket.created_at}}</td>
+                  <td scope="col">{{ticket.id}}</td>
+               </tr>
+               {% endfor %}
+            </tbody>
+         </table>
+      </div>
+   </body>
+</html>

@@ -1,16 +1,13 @@
 .env 
+.DS_Store
+database/
 
 
 venv/
+media/
 files/
-database/
+static/
 staticfiles/
-
-.DS_Store
-
-blog/migrations/
-
-
 
 
 

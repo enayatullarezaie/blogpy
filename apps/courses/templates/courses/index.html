@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link
+         rel="stylesheet"
+         href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+         crossorigin="anonymous"
+      />
+      <title>{{title}}</title>
+   </head>
+   <body>
+      <div class="navbar bg-light border-bottom p-1 pr-5 pl-5 mb-5">
+         <h2 class="nav-item">Home page</h2>
+         <a href="/courses/new-course" class="nav-item">Add New +</a>
+      </div>
+
+      <div class="container">
+         <table class="table font-weight-light">
+            <thead>
+               <tr class="font-weight-light">
+                  <th scope="col">#</th>
+                  <th scope="col">title</th>
+                  <th scope="col">situation</th>
+                  <th scope="col">views</th>
+                  <th scope="col">created_at</th>
+                  <th scope="col">id</th>
+               </tr>
+            </thead>
+
+            <tbody>
+               {% for course in courses %}
+               <tr>
+                  <td scope="col">{{forloop.counter}}</td>
+                  <td scope="col">
+                     <a href="/courses/{{course.id}}">{{course.title}}</a>
+                  </td>
+                  <td scope="col">
+                     {% if course.situation == True %}
+
+                     <span class="badge badge-success"
+                        >{{course.situation}}</span
+                     >
+
+                     {% else %}
+
+                     <span class="badge badge-danger"
+                        >{{course.situation}}</span
+                     >
+
+                     {% endif %}
+                  </td>
+                  <td scope="col">{{course.views}}</td>
+                  <td scope="col">{{course.created_at}}</td>
+                  <td scope="col">
+                     {% if not course.cover %}
+                     <img
+                        style="width: 50px; height: 50px; object-fit: cover"
+                        src="{% static 'courses/img/default-user.png' %}"
+                        alt="no avatar for user"
+                     />
+                     {% else %}
+                     <img
+                        style="width: 50px; height: 50px; object-fit: cover"
+                        src="{{ course.cover.url }}"
+                        alt="{{ course.title }}"
+                     />
+                     {% endif %}
+                  </td>
+               </tr>
+               {% endfor %}
+            </tbody>
+         </table>
+      </div>
+   </body>
+</html>
