@@ -4,6 +4,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = 'django-insecure--5tr92d_!+nc0+2*&-hylnao@pjja!(wop7(ljyx^27@t9_2*k'
 DEBUG = True
+AUTH_USER_MODEL= 'users.User'
 ALLOWED_HOSTS = ['*']
 
 THIRD_PARTY_APPS = [
@@ -11,12 +12,16 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'drf_spectacular',
+    'django_cleanup.apps.CleanupConfig',
+    'django_render_partial',
+    'django_social_share',
 ]
 LOCAL_APPS = [
     'apps.blog',
     'apps.courses',
     'apps.home',
     'apps.tickets',
+    'apps.users',
 ]
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -48,6 +53,8 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'apps.context_processors.context_processors.recent_articles',
+
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -120,18 +127,6 @@ STATICFILES_DIRS=[
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 6,
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ]
-}
-
-
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Your Project API',
@@ -143,4 +138,5 @@ SPECTACULAR_SETTINGS = {
 
 from config.settings.simple_jwt import *
 from config.settings.cors import *
+from config.settings.rest_framework import *
 

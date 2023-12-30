@@ -1,0 +1,272 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html dir="ltr" class="no-js" lang="en">
+   <head>
+      <!--- basic page needs
+    ================================================== -->
+      <meta charset="utf-8" />
+      <title>SHARIS</title>
+      <meta name="description" content="" />
+      <meta name="author" content="" />
+
+      <!-- mobile specific metas
+    ================================================== -->
+      <meta
+         name="viewport"
+         content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+
+      <!-- CSS
+    ================================================== -->
+      <link rel="stylesheet" href="{% static 'blog/css/base.css' %}" />
+      <link rel="stylesheet" href="{% static 'blog/css/vendor.css' %}" />
+      <link rel="stylesheet" href="{% static 'blog/css/main.css' %}" />
+
+      <!-- script
+    ================================================== -->
+      <script src="{% static 'blog/js/modernizr.js' %}"></script>
+
+      <!-- favicons
+    ================================================== -->
+      <link
+         rel="shortcut icon"
+         href="{% static 'blog/favicon.ico' %}"
+         type="image/x-icon"
+      />
+      <link
+         rel="icon"
+         href="{% static 'blog/favicon.ico' %}"
+         type="image/x-icon"
+      />
+   </head>
+
+   <body id="top">
+      <!-- preloader ====================================== -->
+      <!-- <div id="preloader">
+         <div id="loader" class="dots-fade">
+            <div></div>
+            <div></div>
+            <div></div>
+         </div>
+      </div> -->
+
+      <!-- header ========================================= -->
+      <header
+         dir="rtl"
+         class="s-header header"
+         style="user-select: none; text-align: center"
+      >
+         <div class="header__logo">
+            <a class="logo" href="/"> SHARIS </a>
+         </div>
+
+         <a class="header__toggle-menu" title="Menu">
+            <span></span>
+         </a>
+         <nav class="header__nav-wrap">
+            <h2 class="header__nav-heading h6">هدایت به</h2>
+
+            <ul class="header__nav" style="text-align: center">
+               <li>
+                  <form
+                     action="{% url 'blog:search' %}"
+                     method="get"
+                     style="
+                        width: 250px;
+                        height: 50px;
+                        border: 1px solid grey;
+                        padding: 0%;
+                        margin: 0;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: flex-start;
+                     "
+                  >
+                     <button
+                        type="submit"
+                        style="
+                           width: 50px;
+                           height: 100%;
+                           border: 0;
+                           padding: 0;
+                           margin: 0;
+                           display: flex;
+                           align-items: center;
+                           justify-content: center;
+                        "
+                     >
+                        <span class="fa fa-search"></span>
+                     </button>
+                     <input
+                        name="q"
+                        id="q"
+                        type="text"
+                        class="input-group-text"
+                        style="
+                           width: 50px;
+                           height: 100%;
+                           border: 0;
+                           padding: 0 10px;
+                           margin: 0;
+                           flex: 1;
+                        "
+                     />
+                  </form>
+               </li>
+
+               <li>
+                  {% if request.user.is_authenticated %}
+                  <a href="/users/logout/">خروج از حساب کاربری</a>
+                  {% endif %}
+               </li>
+
+               <li>
+                  {% if request.user.is_authenticated %}
+                  <a href="/admin/">{{ request.user.username }}</a>
+                  {% else %}
+                  <a href="/users/login/">ورود به حساب کاربری</a>
+                  {% endif %}
+               </li>
+
+               <li><a href="/contact/" title="">تماس</a></li>
+               <li><a href="/about/" title="">درباره</a></li>
+               <li><a href="/category/" title="">دسته بندی</a></li>
+               <li class="current"><a href="/" title="">خانه</a></li>
+            </ul>
+
+            <span
+               title="Close Menu"
+               class="header__overlay-close close-mobile-menu"
+            >
+               بستن
+            </span>
+         </nav>
+         <style>
+            .header__nav > li {
+               text-align: center;
+            }
+         </style>
+      </header>
+
+      <!-- block content -->
+      {% block content %}
+
+      <!-- 
+         content 
+      -->
+
+      {% endblock %}
+      <!-- endblock -->
+
+      <!-- s-footer  ================================================== -->
+      <footer class="s-footer">
+         <div class="s-footer__main">
+            <div class="row">
+               <div class="col-six tab-full s-footer__about">
+                  <h4>درباره BLOGPY</h4>
+
+                  <p>
+                     لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و
+                     با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه
+                     روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط
+                     فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود
+                     ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد
+                     گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد
+                     تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی
+                     الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.
+                     در این صورت می توان امید داشت که تمام و دشواری موجود در
+                     ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد
+                     نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته
+                     اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+                  </p>
+               </div>
+               <!-- end s-footer__about -->
+
+               <div class="col-six tab-full s-footer__subscribe">
+                  <h4>لورم ایپسوم</h4>
+
+                  <p>
+                     لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و
+                     با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه
+                     مجله در ستون و سطر آنچنان که لازم است و برای شرایط فعلی
+                     تکنولوژی مورد نیاز و کاربردهای.
+                  </p>
+
+                  <div class="subscribe-form">
+                     <form id="mc-form" class="group" novalidate="true">
+                        <input
+                           type="email"
+                           value=""
+                           name="EMAIL"
+                           class="email"
+                           id="mc-email"
+                           placeholder="Email Address"
+                           required=""
+                        />
+
+                        <input type="submit" name="subscribe" value="ارسال" />
+
+                        <label for="mc-email" class="subscribe-message"></label>
+                     </form>
+                  </div>
+               </div>
+               <!-- end s-footer__subscribe -->
+            </div>
+         </div>
+         <!-- end s-footer__main -->
+
+         <div class="s-footer__bottom">
+            <div class="row">
+               <div class="col-six">
+                  <ul class="footer-social">
+                     <li>
+                        <a href="#0"><i class="fab fa-facebook"></i></a>
+                     </li>
+                     <li>
+                        <a href="#0"><i class="fab fa-twitter"></i></a>
+                     </li>
+                     <li>
+                        <a href="#0"><i class="fab fa-instagram"></i></a>
+                     </li>
+                     <li>
+                        <a href="#0"><i class="fab fa-youtube"></i></a>
+                     </li>
+                     <li>
+                        <a href="#0"><i class="fab fa-pinterest"></i></a>
+                     </li>
+                  </ul>
+               </div>
+
+               <div class="col-six">
+                  <div class="s-footer__copyright">
+                     <span>
+                        Copyright &copy;
+                        <script>
+                           document.write(new Date().getFullYear());
+                        </script>
+                        All rights reserved | This template is made with
+                        <i class="fa fa-heart" aria-hidden="true"></i> by
+                        <a href="https://colorlib.com" target="_blank"
+                           >Colorlib</a
+                        >
+                     </span>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- end s-footer__bottom -->
+
+         <div class="go-top">
+            <a class="smoothscroll" title="Back to Top" href="#top"></a>
+         </div>
+      </footer>
+      <!-- end s-footer -->
+
+      <!-- Java Script -->
+      <script src="{% static 'blog/js/jquery-3.2.1.min.js' %}"></script>
+      <script src="{% static 'blog/js/plugins.js' %}"></script>
+      <script src="{% static 'blog/js/main.js' %}"></script>
+   </body>
+</html>

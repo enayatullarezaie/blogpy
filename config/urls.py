@@ -25,18 +25,15 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('rest_framework.urls')),
-    path('', include('apps.home.urls')),
-    path('blog/', include('apps.blog.urls')),
+    path('', include('apps.blog.urls')),
+    path('home', include('apps.home.urls')),
     path('courses/', include('apps.courses.urls')),
     path('tickets/', include('apps.tickets.urls')),
+    path('users/', include('apps.users.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-urlpatterns += static('contact/static/', document_root= settings.MEDIA_ROOT)
-urlpatterns += static('about/static/', document_root= settings.MEDIA_ROOT)
-urlpatterns += static('category/static/', document_root= settings.MEDIA_ROOT)
 
 
 

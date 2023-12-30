@@ -1,10 +1,9 @@
 from django.db import models
-from django.contrib.auth import get_user_model
+from django.urls import reverse
+from apps.users.models import User
 from datetime import datetime
+from django.utils.text import slugify
 
-
-
-User= get_user_model()
 
 def validate_file_extension (value):
    import os
@@ -17,34 +16,77 @@ def validate_file_extension (value):
 
 class UserProfile (models.Model) :
    id = models.BigAutoField(primary_key= True, editable=False)
-   user = models.OneToOneField(User, on_delete=models.CASCADE)
-   avatar = models.FileField(upload_to= 'user_avatar/', null=False, blank=False, validators= [validate_file_extension])
+   user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+   avatar = models.FileField(upload_to= 'images/user_avatar/', null=False, blank=False, validators= [validate_file_extension])
    description = models.CharField(max_length=512, null=False, blank=False)
    def __str__(self):
-      return self.user.first_name + ' ' + self.user.last_name
+      return self.user.username
 
 class Category (models.Model):
    title = models.CharField(max_length=128, null=False, blank=False)
-   cover = models.FileField(upload_to='category_cover/', null=False, blank= False, validators= [validate_file_extension] )
+   cover = models.FileField(
+      upload_to='images/category_cover/', 
+      null=False, 
+      blank= False, 
+      validators= [validate_file_extension] 
+   )
+   objects = models.Manager()
    def __str__(self):
       return self.title
 
 
+class ArticleManager(models.Manager):
+
+   def get_all(self):
+      return self.all()
+
 class Article(models.Model):
    id = models.BigAutoField(primary_key= True, editable=False)
-   title = models.CharField(max_length=128, null=False, blank=False)
-   cover = models.FileField (upload_to='article_cover/', null=False, blank=False, validators= [validate_file_extension])
-   content = models.TextField()
-   created_at = models.DateTimeField(default=datetime.now, blank=False)
+   title = models.CharField(max_length=256, null=False, blank=False, unique= True)
+   slug = models.SlugField(max_length=256, null=True, blank=True, unique= True, allow_unicode=True)
+   content = models.TextField(max_length=5120)
    category = models.ForeignKey(Category, on_delete= models.CASCADE)
    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
    promote= models.BooleanField(default= False)
+   created_at = models.DateTimeField(auto_now_add=True, blank=False)
+   updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+   cover = models.FileField (
+      upload_to='images/article_cover/', 
+      null=False, 
+      blank=False, 
+      validators= [validate_file_extension]
+   )
+   objects = ArticleManager()
+
+   class Meta:
+      ordering= ('-created_at',)
+
+   def get_absolute_url(self):
+      return reverse('blog:detail', kwargs= {"slug": self.slug})
+   
+   def save(self) -> None:
+      self.slug = self.title.replace(" ", "-")
+      self.slug = slugify(self.title, allow_unicode=True)
+
+      print(slugify(self.title, allow_unicode=True))
+      super(Article, self).save()
    
    def __str__(self):
       return self.title
 
 
+class Comment(models.Model):
+   article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, blank=True, related_name= "comments")
+   user = models.ForeignKey(User, on_delete=models.CASCADE, related_name= "comments")
+   parent = models.ForeignKey("Comment" , on_delete=models.CASCADE, null=True, blank=True, related_name= "replies")
+   text = models.TextField(max_length=256,null =True)
+   created_at = models.DateTimeField(auto_now_add=True)
+   class Meta:
+      ordering= ['-created_at']
+   def __str__(self) -> str:
+      return self.article.title
 
 
+ 
 
 

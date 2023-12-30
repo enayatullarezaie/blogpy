@@ -35,10 +35,14 @@ def new_cource(request):
          return redirect("/courses/")
    
    if request.method == "POST":
+      submitted = False
       if 'save' in request.POST :
-         form = CourseForm(request.POST)
+         form = CourseForm(request.POST, request.FILES)
          if form.is_valid():
-            form.save()
+            course= form.save(commit=False)
+            # course.owner = request.user.id
+            course.save()
+            # form.save()
          return redirect("/courses/")
    
    return render(request, 'courses/new-course.html', context={ "form": form})

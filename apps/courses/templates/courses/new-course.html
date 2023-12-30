@@ -33,6 +33,7 @@
             action="{% url 'new-course' %}"
             method="post"
             id="form_post_sender"
+            enctype="multipart/form-data"
          >
             {% csrf_token %} {{ form }}
 
@@ -45,6 +46,7 @@
             class="border w-50 mt-3 mb-5 m-auto p-5 d-flex flex-column align-items-stretch"
             action=""
             method="post"
+            enctype="multipart/form-data"
          >
             {% csrf_token %}
             <div
