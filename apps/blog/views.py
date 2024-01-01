@@ -1,12 +1,40 @@
+from typing import Any
+from django.forms.models import BaseModelForm
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, HttpResponse, redirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView, View, ListView, DetailView, CreateView,FormView, UpdateView, DeleteView
 from .models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from . import serializers
 from django.core.paginator import Paginator
+from .forms import *
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
+
+
+class LikeHandler(TemplateView):
+   def get(self, request):
+      return JsonResponse({ "detail" : "detail" })
+
+   def post(self, request):
+      article_id = request.POST['article_id']
+      user = request.user.id
+      try:
+         like = Like.objects.filter(article_id= article_id, user_id=user).first()
+         if like:
+            like.delete()
+            like_by_me  = False
+         else:
+            like = Like.objects.create(article_id= article_id, user_id= request.user.id)
+            like_by_me  = True
+         return JsonResponse({ "like_by_me": like_by_me })
+      except Exception as err:
+         print(err)
+         return HttpResponse({}, status=400)
+         
 
 def sidebar(request): 
    context={"name": "enayat"}
@@ -43,20 +71,78 @@ class IndexPage(TemplateView):
       return render(request, "blog/index.html", context)
 
 
+class ArticleDetailView(DetailView):
+   model= Article
+   template_name= 'blog/article_detail'
+   context_object_name= ('article', 'object',)
+   
+
+class ArticleFormView(FormView):
+   form_class = TicketForm
+   template_name= 'blog/article_form'
+   success_url= reverse_lazy("blog:home")
+
+   def form_valid(self, form) -> HttpResponse:
+      data = form.cleaned_data
+      Ticket.objects.create(**data)
+      return super().form_valid(form)
+   
+   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+      context = super().get_context_data(**kwargs)
+      context["tickets"] = Ticket.objects.all()
+      return context
+   
+
+class ArticleCreateView(CreateView):   
+   model= Article
+   template_name= 'blog/article_form'
+   success_url= reverse_lazy("blog:home")
+
+   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+      context = super().get_context_data(**kwargs)
+      context["articles"] = Article.objects.all()
+      return context                     
+   
+   def form_valid(self, form: BaseModelForm) -> HttpResponse:
+      instance = form.save(commit=False)
+      instance.email = self.request.user.email
+      instance.save()
+      return super().form_valid(form)
+   
+   def get_success_url(self) -> str:
+      print(self.object)
+      return super(ArticleCreateView, self).get_success_url()
+
+
+class ArticleUpdateView(UpdateView):
+   model= Article
+   fields= '__all__'
+   template_name= 'blog/article_update_form'
+   success_url = '/'
+
+
+class ArticleDeleteView(DeleteView):
+   model= Article
+   success_url = '/'
+
+
 class ArticleDetail(TemplateView):
    def get(self, request, slug):
       try:
+         if request.user.likes.filter(article__slug = slug ):
+            like_by_me = True
+         else:
+            like_by_me= False
+            
          article= Article.objects.get(slug= slug)
-         author = article.author
-         # comments = Comment.onjects.filter(article=article)
       except:
          return HttpResponse({}, status=404)
-      context={ 
+      
+      context={
          "article": article, 
-         "comments":"comments", 
-         "author": author,
+         'like_by_me': like_by_me,
       }
-      return render( request,'blog/single-blog.html', context=context)
+      return render( request,'blog/article_detail.html', context=context)
    
    def post(self, request, slug):
       article= Article.objects.get(slug= slug)
@@ -70,33 +156,56 @@ class ArticleDetail(TemplateView):
             parent_id = request.POST["parent_id"]
          )
          return redirect( article.get_absolute_url() )
-
+      
+      if request.user.likes.filter(article__slug = slug ):
+         like_by_me = True
+      else:
+         like_by_me= False
+         
       new_comm = Comment.objects.create(
          user= user,
          text = text,
          article = article,
+         like_by_me = like_by_me
       )
       context={ 
          "article": article, 
       }
-      return render( request,'blog/single-blog.html', context=context)
+      
+
+         
+      return render( request,'blog/article_detail.html', context=context)
 
 
 class ContactPage(TemplateView):
-   template_name = 'blog/page-contact.html'
+   def get(self, request):
+      form = ContactForms()
+      form = TicketForm()
+
+      return render(request, 'blog/contact-page.html', context={"form": form})
+   
+   def post(self, request):
+      form =  ContactForms(data= request.POST)
+      if form.is_valid():
+         fullname =  form.cleaned_data.get("fullname")
+         title =  form.cleaned_data.get("title")
+         text =  form.cleaned_data.get("text")
+         print(fullname, title, text)
+
+      return render(request, 'blog/contact-page.html', context={"form": form})
 
 
 class AboutPage(TemplateView):
    template_name = 'blog/page-about.html'
+   def get_context_data(self, **kwargs: Any):
+      context= super().get_context_data(**kwargs)
+      context['object_list'] = Article.objects.all()
+      return context
 
 
 class CategoryPage(TemplateView):
-   template_name = 'blog/page-category.html'
-
-
-class CategoryPage(TemplateView):
-   template_name = 'blog/search.html'
-
+   def get (self, request):
+      return render(request, 'blog/category-page.html', context={})
 
 
 class AllArticlesAPIView(APIView):

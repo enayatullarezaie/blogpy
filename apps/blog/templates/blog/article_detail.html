@@ -19,17 +19,39 @@
 
       <div class="entry__media col-full">
          <div class="entry__post-thumb">
-            <img src="{{ article.cover.url }}" alt="{{article.title}}" />
+            <img src="{{ article.cover.url }}" alt="{{ article.title }}" />
+         </div>
+
+         <div class="likebtnWrapper">
+            <div class="likeBtn">
+               <div id="like_by_me_btn" onclick="likeByMeHandler()">
+                  <i
+                     class="{% if like_by_me %}fas{% else %}far{% endif %} fa-heart"
+                     style="font-size: 24px"
+                     id="like_by_me_icon"
+                  ></i>
+                  <span id="article_id_value" style="display: none">
+                     {{ article.id }}
+                  </span>
+               </div>
+               <p id="like_by_me_counter">{{ article.likes.count }}</p>
+            </div>
+
+            <div class="dislikeBtn">
+               <div>dislike</div>
+               <p>{{ article.dislikes.count }}</p>
+            </div>
          </div>
       </div>
 
       <div class="entry__header col-full">
          <h1 class="entry__header-title display-1">{{ article.title }}</h1>
+
          <ul class="entry__header-meta">
             <li class="date">{{ article.created_at }}</li>
             <li class="byline">
                By
-               <a href="">{{ author.user.username }}</a>
+               <a href="">{{ article.author.user.username }}</a>
             </li>
          </ul>
       </div>
@@ -56,13 +78,25 @@
                /* background-color: lightgray; */
             "
          >
-            <div style="width: 50px; height: 100%; padding: 10px 0; margin: 0">
+            <div
+               style="
+                  width: 50px;
+                  min-width: 50px;
+                  height: 100%;
+                  padding: 10px 0;
+                  margin: 0;
+               "
+            >
                {% if comment.user.profile.avatar.url %}
 
                <img
-                  style="width: 50px; height: 50px; aspect-ratio: 1"
+                  style="
+                     width: 50px;
+                     min-width: 50px;
+                     height: 50px;
+                     aspect-ratio: 1;
+                  "
                   src="{{ comment.user.profile.avatar.url }}"
-                  alt="{{author.user.username}}"
                />
 
                {% else %}
@@ -101,7 +135,9 @@
                   </p>
                </div>
 
-               <p style="margin: 0">{{ comment.text }}</p>
+               <p style="margin: 0; font-size: 14px; text-align: justify">
+                  {{ comment.text }}
+               </p>
 
                <div>
                   <form
@@ -209,17 +245,20 @@
 
       <div>
          <div class="entry__author">
-            <img src="{{ author.avatar.url }}" alt="{{author.user.username}}" />
+            <img
+               src="{{ article.author.avatar.url }}"
+               alt="{{article.author.user.username}}"
+            />
 
             <div class="entry__author-about">
                <h5 class="entry__author-name">
                   <span>پست شده توسط</span>
-                  <div>{{ author.user.username }}</div>
+                  <div>{{ article.author.user.username }}</div>
                </h5>
 
                <div class="entry__author-desc">
-                  <p>{{ author.description }}</p>
-                  <p>{{ author.description }}</p>
+                  <p>{{ article.author.description }}</p>
+                  <p>{{ article.author.description }}</p>
                </div>
             </div>
          </div>
@@ -227,6 +266,42 @@
    </article>
    <!-- end entry/article -->
 </section>
+
+<style>
+   .likebtnWrapper {
+      width: 100%;
+      height: 50px;
+      padding: 3px 10px;
+
+      display: flex;
+      flex-direction: row;
+      gap: 1em;
+   }
+   .likeBtn {
+      padding: 1px 10px;
+      /* background-color: aqua; */
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 5px;
+   }
+   .likeBtn > div {
+      cursor: pointer;
+   }
+   .dislikeBtn {
+      padding: 1px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 5px;
+   }
+   .dislikeBtn > div {
+      cursor: pointer;
+   }
+</style>
 
 <!-- endblock -->
 {% endblock %}

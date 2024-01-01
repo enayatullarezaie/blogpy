@@ -38,21 +38,55 @@
             />
          </p>
 
-         <h2 style="text-align: right">سلام</h2>
+         <div>
+            <form
+               action="{% url 'blog:contact' %}"
+               method="post"
+               id="form_select_all"
+               class="form_select_class"
+            >
+               {% csrf_token %}
+               <!--  -->
+               {{ form.non_field_errors }}
+               <!--  -->
+               {{ form }}
 
-         <p>
-            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
-            استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه مجله در
-            ستون و سطر آنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و
-            کاربردهای
-         </p>
+               <!-- <p>{{ form.fullname.label }}</p>
+               <p>{{ form.fullname.errors }}</p>
+               <p>{{ form.fullname }}</p>
 
-         <p>
-            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
-            استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه مجله در
-            ستون و سطر آنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و
-            کاربردهای
-         </p>
+               <p>{{ form.title.label }}</p>
+               <p>{{ form.title.errors }}</p>
+               <p>{{ form.title. }}</p>
+
+               <p>{{ form.text.label }}</p>
+               <p>{{ form.text.errors }}</p>
+               <p>{{ form.text }}</p> -->
+               <button type="submit">send</button>
+            </form>
+            <style>
+               .form_select_class {
+                  width: 100%;
+                  max-width: 600px;
+                  height: max-content;
+                  padding: 10px 20px;
+                  display: grid;
+                  grid-template-columns: repeat(2, 1fr);
+                  grid-template-rows: repeat(5, 60px);
+                  align-items: center;
+                  justify-content: start;
+                  gap: 1px 10px;
+               }
+               .form_select_class > input {
+                  width: 100%;
+                  height: max-content;
+                  border: 1px solid grey;
+                  border-radius: 5px;
+                  padding: 5px 10px;
+                  margin: 0;
+               }
+            </style>
+         </div>
 
          <div class="row">
             <div class="col-six tab-full">
@@ -80,6 +114,9 @@
    </div>
    <!-- end row -->
 </section>
+<script>
+   console.log(document.getElementById("form_select_all").innerHTML);
+</script>
 <!-- end s-content -->
 
 {% endblock %}

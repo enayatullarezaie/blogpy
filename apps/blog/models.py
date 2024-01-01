@@ -3,7 +3,7 @@ from django.urls import reverse
 from apps.users.models import User
 from datetime import datetime
 from django.utils.text import slugify
-
+from django.utils.html import format_html
 
 def validate_file_extension (value):
    import os
@@ -22,6 +22,7 @@ class UserProfile (models.Model) :
    def __str__(self):
       return self.user.username
 
+
 class Category (models.Model):
    title = models.CharField(max_length=128, null=False, blank=False)
    cover = models.FileField(
@@ -35,10 +36,6 @@ class Category (models.Model):
       return self.title
 
 
-class ArticleManager(models.Manager):
-
-   def get_all(self):
-      return self.all()
 
 class Article(models.Model):
    id = models.BigAutoField(primary_key= True, editable=False)
@@ -56,14 +53,20 @@ class Article(models.Model):
       blank=False, 
       validators= [validate_file_extension]
    )
-   objects = ArticleManager()
-
+   objects = models.Manager()
    class Meta:
       ordering= ('-created_at',)
 
    def get_absolute_url(self):
       return reverse('blog:detail', kwargs= {"slug": self.slug})
    
+   def get_cover(self):
+      if self.cover:
+         return format_html(
+            f"<img src='{self.cover.url}' width='50px' height='40px' style='object-fit:cover'>"
+         )
+      else:
+         return format_html("<h4>no cover</h4>")
    def save(self) -> None:
       self.slug = self.title.replace(" ", "-")
       self.slug = slugify(self.title, allow_unicode=True)
@@ -87,6 +90,17 @@ class Comment(models.Model):
       return self.article.title
 
 
- 
+class Like(models.Model):
+   id = models.BigAutoField(primary_key= True, editable=False)
+   user = models.ForeignKey(User, on_delete= models.CASCADE, null=True, related_name= "likes")
+   article = models.ForeignKey(Article, on_delete= models.CASCADE, null=True, related_name= "likes")
+   created_at= models.DateTimeField(auto_now_add=True, null=True)
+
+
+class DisLike(models.Model):
+   id = models.BigAutoField(primary_key= True, editable=False)
+   user = models.ForeignKey(User, on_delete= models.CASCADE, null=True, related_name= "dislikes")
+   article = models.ForeignKey(Article, on_delete= models.CASCADE, null=True, related_name= "dislikes")
+   created_at= models.DateTimeField(auto_now_add=True, null=True)
 
 

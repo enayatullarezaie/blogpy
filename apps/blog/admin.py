@@ -6,10 +6,24 @@ class UserProfileAdmin(admin.ModelAdmin):
    list_display= ['user', 'avatar', 'description']
 admin.site.register(UserProfile, UserProfileAdmin)
 
+class UserLikeAdmin(admin.ModelAdmin):
+   list_display= ['user', 'article']
+admin.site.register(Like, UserLikeAdmin)
+
+class UserDisLikeAdmin(admin.ModelAdmin):
+   list_display= ['user', 'article']
+admin.site.register(DisLike, UserDisLikeAdmin)
+
+
+class CommentInline(admin.TabularInline):
+   model= Comment
 
 class ArticleAdmin(admin.ModelAdmin):
    search_fields= ['title', 'content']
-   list_display= ['title', 'category', 'created_at']
+   list_display= ['title', 'category', 'created_at',"promote", "get_cover"]
+   list_filter = ["created_at"]
+   list_editable = ["promote"]
+   inlines = [CommentInline]
 admin.site.register(Article, ArticleAdmin)
 
 class CategoryAdmin(admin.ModelAdmin):

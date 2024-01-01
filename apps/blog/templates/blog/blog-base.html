@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %} {% load filters %}
 
 <!DOCTYPE html>
 <html dir="ltr" class="no-js" lang="en">
@@ -22,6 +22,10 @@
       <link rel="stylesheet" href="{% static 'blog/css/base.css' %}" />
       <link rel="stylesheet" href="{% static 'blog/css/vendor.css' %}" />
       <link rel="stylesheet" href="{% static 'blog/css/main.css' %}" />
+      <link
+         rel="stylesheet"
+         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      />
 
       <!-- script
     ================================================== -->
@@ -73,7 +77,8 @@
                      action="{% url 'blog:search' %}"
                      method="get"
                      style="
-                        width: 250px;
+                        min-width: 270px;
+                        width: 100%;
                         height: 50px;
                         border: 1px solid grey;
                         padding: 0%;
@@ -88,6 +93,7 @@
                         type="submit"
                         style="
                            width: 50px;
+                           min-width: 50px;
                            height: 100%;
                            border: 0;
                            padding: 0;
@@ -95,6 +101,7 @@
                            display: flex;
                            align-items: center;
                            justify-content: center;
+                           background-color: aqua;
                         "
                      >
                         <span class="fa fa-search"></span>
@@ -104,6 +111,7 @@
                         id="q"
                         type="text"
                         class="input-group-text"
+                        autocomplete="off"
                         style="
                            width: 50px;
                            height: 100%;
@@ -132,7 +140,9 @@
 
                <li><a href="/contact/" title="">تماس</a></li>
                <li><a href="/about/" title="">درباره</a></li>
-               <li><a href="/category/" title="">دسته بندی</a></li>
+               <li>
+                  <a href="{% url 'blog:category' %}" title="">دسته بندی</a>
+               </li>
                <li class="current"><a href="/" title="">خانه</a></li>
             </ul>
 
@@ -166,21 +176,9 @@
             <div class="row">
                <div class="col-six tab-full s-footer__about">
                   <h4>درباره BLOGPY</h4>
-
-                  <p>
-                     لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و
-                     با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه
-                     روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط
-                     فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود
-                     ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد
-                     گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد
-                     تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی
-                     الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.
-                     در این صورت می توان امید داشت که تمام و دشواری موجود در
-                     ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد
-                     نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته
-                     اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
-                  </p>
+                  <div>
+                     <p>{% current_time '%Y-%m-%d %I:%M %p' %}</p>
+                  </div>
                </div>
                <!-- end s-footer__about -->
 
@@ -268,5 +266,6 @@
       <script src="{% static 'blog/js/jquery-3.2.1.min.js' %}"></script>
       <script src="{% static 'blog/js/plugins.js' %}"></script>
       <script src="{% static 'blog/js/main.js' %}"></script>
+      <script src="{% static 'blog/js/ajax-handle-like.js' %}"></script>
    </body>
 </html>
