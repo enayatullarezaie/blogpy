@@ -54,7 +54,7 @@ def search(request):
    return render(request, "blog/search.html", context={ "articles": art_list, 'q':query})
 
 
-class IndexPage(TemplateView):
+class IndexPage(View):
    def get(self, request):
       page_number= request.GET.get("page")
       if not page_number:
@@ -68,9 +68,12 @@ class IndexPage(TemplateView):
          'article_list': art_list,
          'promote_data': promote_arts
       }
+      # self.request.session["name"] = "enayat"
+      print(self.request.session["name"])
       return render(request, "blog/index.html", context)
+   
 
-
+      
 class ArticleDetailView(DetailView):
    model= Article
    template_name= 'blog/article_detail'

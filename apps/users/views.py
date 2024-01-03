@@ -7,6 +7,33 @@ from .forms import *
 
 
 
+
+class UserRegisterView(TemplateView):
+   def post(self, request):
+      if request.user.is_authenticated :
+         return redirect("blog:home-blog")
+      
+      form = UserCreationForm(request.POST)
+      print("BEFORE is_valid()")
+      if form.is_valid():
+         print("AFTER is_valid()")
+         print("BEFOR form.save()")
+         user = form.save()
+         login(request, user)
+         print("AFTER form.save()")
+         return redirect("blog:home-blog")
+         
+      return render(request, 'users/register.html', context={"form": form})
+   
+   def get(self, request):
+      if request.user.is_authenticated :
+         return redirect("blog:home-blog")
+      
+      form = UserCreationForm()
+      
+      return render(request, 'users/register.html', context={"form": form})
+      
+      
 def user_register (request):
    if request.user.is_authenticated :
       return redirect("blog:home-blog")
